@@ -34,6 +34,11 @@ Förslaget postas till `POST /api/submit` och sparas i D1-databasen
 `klarsprak-db` (tabell `submissions`) med status `pending`. Inget publiceras
 automatiskt.
 
+`/api/submit` är IP-baserat rate-begränsat: max 5 inlägg per `CF-Connecting-IP`
+per rullande timme (räknas mot `submissions.submitter_ip`, se
+`migrations/0002_add_submitter_ip.sql`). Förfrågningar utan identifierbar IP
+spärras inte (kan inte räknas).
+
 En människa (kontoägaren) granskar kön på `/admin.html`:
 
 - Sidan frågar efter admin-token (sparas endast i `sessionStorage`, aldrig

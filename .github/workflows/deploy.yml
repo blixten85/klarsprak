@@ -11,6 +11,12 @@ on:
   push:
     branches: [main]
   workflow_dispatch: {}
+  schedule:
+    # Säkerhetsnät: auto-merge-boten (Bot Auto-Merge) mergar claude/-PR:ar med
+    # standard-GITHUB_TOKEN, vilket GitHub inte låter trigga push-workflows.
+    # Utan detta blir mergad kod tyst odeployad. wrangler deploy är
+    # idempotent, så en periodisk körning kostar inget om main redan är live.
+    - cron: '*/30 * * * *'
 
 concurrency:
   group: deploy
