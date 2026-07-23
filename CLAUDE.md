@@ -7,9 +7,14 @@ politiker.denied.se. Live på klarsprak.denied.se.
 
 ## Conventions
 
-- All kod är en enda statisk HTML-fil (`public/index.html`, inline CSS+JS),
-  ingen build-process.
-- Worker-namn: `klarsprak`. Config i `wrangler.jsonc` (assets-binding).
+- Frontend är statiska HTML-filer (`public/index.html`, `public/admin.html`,
+  inline CSS+JS), ingen build-process.
+- Backend är en riktig Worker (`src/worker.js`) som hanterar `/api/submit`,
+  `/api/admin/queue`, `/api/admin/review/:id` och annars vidarebefordrar till
+  assets-bindingen.
+- Worker-namn: `klarsprak`. Config i `wrangler.jsonc` (assets-binding +
+  D1-binding `DB` mot databasen `klarsprak-db`).
+- Admin-endpoints skyddas av bearer-token mot secreten `ADMIN_TOKEN`.
 - Deploy sker via `.github/workflows/deploy.yml` vid push till main.
 - Innehållet i ordboken är AI-genererat och opublicerat — inte juridiskt
   sakgranskat. Ändra gärna presentation/kod, men flagga tydligt om

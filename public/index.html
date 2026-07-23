@@ -372,6 +372,178 @@
   @media (prefers-reduced-motion: no-preference) {
     .card { transition: border-color 0.15s ease; }
   }
+
+  .contribute-strip .fake-btn {
+    cursor: pointer;
+  }
+
+  .contribute-strip .fake-btn:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .contribute-strip .fake-btn:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 4vh 1rem;
+    overflow-y: auto;
+    z-index: 100;
+  }
+
+  .modal-backdrop[hidden] { display: none; }
+
+  .modal {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    max-width: 560px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  }
+
+  .modal-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.3rem 1.4rem 1rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .modal-head h2 {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    font-weight: 400;
+    font-size: 1.4rem;
+    margin: 0;
+  }
+
+  .modal-close {
+    background: transparent;
+    border: none;
+    color: var(--ink-soft);
+    font-size: 1.1rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0.3rem;
+  }
+
+  .modal-close:hover { color: var(--ink); }
+  .modal-close:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  .modal-body {
+    padding: 1.2rem 1.4rem 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .field-label {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  .field-label .req { color: var(--ochre); }
+
+  .field input,
+  .field textarea {
+    font-family: inherit;
+    font-size: 0.92rem;
+    padding: 0.6rem 0.75rem;
+    border: 1.5px solid var(--line);
+    border-radius: 7px;
+    background: var(--paper);
+    color: var(--ink);
+    resize: vertical;
+  }
+
+  .field input:focus-visible,
+  .field textarea:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 1px;
+    border-color: var(--focus);
+  }
+
+  .field-hint {
+    margin: -0.4rem 0 0;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+
+  .form-error {
+    margin: 0;
+    padding: 0.65rem 0.85rem;
+    background: var(--gap-bg);
+    border: 1px solid var(--gap-border);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    color: var(--ink);
+  }
+
+  .form-success {
+    margin: 0;
+    padding: 0.65rem 0.85rem;
+    background: var(--ochre-soft);
+    border: 1px solid var(--ochre-line);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    color: var(--ink);
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.6rem;
+    margin-top: 0.3rem;
+  }
+
+  .btn-secondary,
+  .btn-primary {
+    font-size: 0.88rem;
+    padding: 0.6rem 1.1rem;
+    border-radius: 7px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .btn-secondary {
+    background: transparent;
+    border: 1.5px solid var(--line);
+    color: var(--ink);
+  }
+
+  .btn-secondary:hover { border-color: var(--ink-soft); }
+
+  .btn-primary {
+    background: var(--navy);
+    border: 1.5px solid var(--navy);
+    color: var(--navy-soft);
+  }
+
+  .btn-primary:hover { opacity: 0.9; }
+  .btn-primary:disabled { opacity: 0.6; cursor: default; }
+
+  .btn-secondary:focus-visible,
+  .btn-primary:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
 </style>
 
 <div class="wrap">
@@ -394,13 +566,58 @@
   <div id="list"></div>
 
   <div class="contribute-strip">
-    <p><strong>Föreslå en term.</strong> I den riktiga versionen kan vem som helst föreslå begrepp och definitioner — varje bidrag granskas av en människa innan publicering, oavsett om förslaget kom från AI eller en besökare.</p>
-    <button class="fake-btn" type="button" disabled>Föreslå term (kommer snart)</button>
+    <p><strong>Föreslå en term.</strong> Vem som helst kan föreslå begrepp och definitioner — varje bidrag granskas av en människa innan publicering, oavsett om förslaget kom från AI eller en besökare.</p>
+    <button class="fake-btn" id="suggest-btn" type="button">Föreslå term</button>
   </div>
 
   <footer>
     Prototyp byggd som underlag för diskussion. Rättsområdes-taggar och exempel är förenklingar i pedagogiskt syfte, inte juridisk rådgivning.
   </footer>
+</div>
+
+<div class="modal-backdrop" id="modal-backdrop" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-head">
+      <h2 id="modal-title">Föreslå en term</h2>
+      <button class="modal-close" id="modal-close" type="button" aria-label="Stäng">✕</button>
+    </div>
+
+    <form id="suggest-form" class="modal-body">
+      <label class="field">
+        <span class="field-label">Term <span class="req">*</span></span>
+        <input type="text" name="term" required maxlength="200" />
+      </label>
+      <label class="field">
+        <span class="field-label">Vad du nog tror det betyder</span>
+        <textarea name="foreslagen_vardagsbetydelse" rows="3" maxlength="4000"></textarea>
+      </label>
+      <label class="field">
+        <span class="field-label">Vad det faktiskt betyder (juridisk definition)</span>
+        <textarea name="foreslagen_juridisk_definition" rows="3" maxlength="4000"></textarea>
+      </label>
+      <label class="field">
+        <span class="field-label">Exempel</span>
+        <textarea name="foreslagen_exempel" rows="2" maxlength="2000"></textarea>
+      </label>
+      <p class="field-hint">Fyll i minst en av vardagsbetydelse eller juridisk definition.</p>
+      <label class="field">
+        <span class="field-label">Ditt namn (valfritt)</span>
+        <input type="text" name="inskickare_namn" maxlength="200" />
+      </label>
+      <label class="field">
+        <span class="field-label">Kommentar (valfritt)</span>
+        <textarea name="inskickare_kommentar" rows="2" maxlength="2000"></textarea>
+      </label>
+
+      <p class="form-error" id="form-error" hidden></p>
+      <p class="form-success" id="form-success" hidden>Tack, ditt förslag granskas innan det publiceras.</p>
+
+      <div class="modal-actions">
+        <button type="button" class="btn-secondary" id="modal-cancel">Avbryt</button>
+        <button type="submit" class="btn-primary" id="modal-submit">Skicka förslag</button>
+      </div>
+    </form>
+  </div>
 </div>
 
 <script>
@@ -800,4 +1017,77 @@
 
   renderFilters();
   renderList();
+
+  // --- Föreslå term: modal + inskickning ---
+  const suggestBtn = document.getElementById('suggest-btn');
+  const backdrop = document.getElementById('modal-backdrop');
+  const modalClose = document.getElementById('modal-close');
+  const modalCancel = document.getElementById('modal-cancel');
+  const form = document.getElementById('suggest-form');
+  const formError = document.getElementById('form-error');
+  const formSuccess = document.getElementById('form-success');
+  const submitBtn = document.getElementById('modal-submit');
+
+  function openModal() {
+    backdrop.hidden = false;
+    formError.hidden = true;
+    formSuccess.hidden = true;
+    form.hidden = false;
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Skicka förslag';
+    const first = form.querySelector('input[name="term"]');
+    if (first) first.focus();
+  }
+
+  function closeModal() {
+    backdrop.hidden = true;
+    form.reset();
+  }
+
+  suggestBtn.addEventListener('click', openModal);
+  modalClose.addEventListener('click', closeModal);
+  modalCancel.addEventListener('click', closeModal);
+  backdrop.addEventListener('click', e => { if (e.target === backdrop) closeModal(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !backdrop.hidden) closeModal();
+  });
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    formError.hidden = true;
+
+    const data = Object.fromEntries(new FormData(form).entries());
+    if (!data.term || !data.term.trim()) {
+      formError.textContent = 'Term krävs.';
+      formError.hidden = false;
+      return;
+    }
+    if (!data.foreslagen_vardagsbetydelse?.trim() && !data.foreslagen_juridisk_definition?.trim()) {
+      formError.textContent = 'Fyll i minst vardagsbetydelse eller juridisk definition.';
+      formError.hidden = false;
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Skickar…';
+
+    try {
+      const res = await fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(body.error || 'Något gick fel. Försök igen.');
+      }
+      form.hidden = true;
+      formSuccess.hidden = false;
+    } catch (err) {
+      formError.textContent = err.message || 'Något gick fel. Försök igen.';
+      formError.hidden = false;
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Skicka förslag';
+    }
+  });
 </script>

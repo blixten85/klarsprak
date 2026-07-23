@@ -1,10 +1,19 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "klarsprak",
+  "main": "src/worker.js",
   "compatibility_date": "2026-07-01",
   "assets": {
-    "directory": "./public"
+    "directory": "./public",
+    "binding": "ASSETS"
   },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "klarsprak-db",
+      "database_id": "a8117d9d-a65d-430d-a8a2-9b4ef3fd9e2f"
+    }
+  ],
   "observability": {
     "enabled": true,
     "head_sampling_rate": 1
