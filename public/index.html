@@ -1,0 +1,803 @@
+<title>Klarspråk — juridik till vardagsspråk</title>
+<style>
+  :root {
+    --paper: #f4f5f1;
+    --paper-raised: #ffffff;
+    --ink: #1b2422;
+    --ink-soft: #4a534f;
+    --line: #d8dad3;
+    --navy: #2c3b5c;
+    --navy-soft: #e7eaf2;
+    --navy-line: #c3cbdd;
+    --ochre: #8a5f1f;
+    --ochre-soft: #f4ead4;
+    --ochre-line: #e0cb9c;
+    --gap-bg: #fbf3e2;
+    --gap-border: #e4c887;
+    --focus: #2c3b5c;
+  }
+
+  :root[data-theme="dark"] {
+    --paper: #12161a;
+    --paper-raised: #191e23;
+    --ink: #e7e5dc;
+    --ink-soft: #a9afa8;
+    --line: #2a3138;
+    --navy: #8a9dcf;
+    --navy-soft: #1c2436;
+    --navy-line: #384566;
+    --ochre: #dda94f;
+    --ochre-soft: #2c2415;
+    --ochre-line: #4a3c1e;
+    --gap-bg: #21190e;
+    --gap-border: #4a3c1e;
+    --focus: #8a9dcf;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12161a;
+      --paper-raised: #191e23;
+      --ink: #e7e5dc;
+      --ink-soft: #a9afa8;
+      --line: #2a3138;
+      --navy: #8a9dcf;
+      --navy-soft: #1c2436;
+      --navy-line: #384566;
+      --ochre: #dda94f;
+      --ochre-soft: #2c2415;
+      --ochre-line: #4a3c1e;
+      --gap-bg: #21190e;
+      --gap-border: #4a3c1e;
+      --focus: #8a9dcf;
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  header.masthead {
+    border-bottom: 3px solid var(--ink);
+    padding-bottom: 1.75rem;
+    margin-bottom: 2.25rem;
+  }
+
+  .eyebrow {
+    font-family: ui-monospace, "SF Mono", "Cascadia Code", Menlo, monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .eyebrow .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ochre);
+    flex: none;
+  }
+
+  h1 {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    font-weight: 400;
+    font-size: clamp(2.1rem, 5vw, 3rem);
+    line-height: 1.08;
+    margin: 0 0 0.7rem;
+    text-wrap: balance;
+    letter-spacing: -0.01em;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--navy);
+  }
+
+  .lede {
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    max-width: 62ch;
+    margin: 0;
+  }
+
+  .status-note {
+    margin-top: 1.5rem;
+    padding: 0.9rem 1.1rem;
+    background: var(--gap-bg);
+    border: 1px solid var(--gap-border);
+    border-radius: 6px;
+    font-size: 0.86rem;
+    color: var(--ink);
+    display: flex;
+    gap: 0.7rem;
+    align-items: flex-start;
+  }
+
+  .status-note strong { font-weight: 650; }
+
+  .controls {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--paper);
+    padding: 1.1rem 0 1rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+  }
+
+  #search {
+    flex: 1 1 240px;
+    min-width: 0;
+    padding: 0.65rem 0.9rem;
+    border: 1.5px solid var(--line);
+    border-radius: 7px;
+    background: var(--paper-raised);
+    color: var(--ink);
+    font-size: 0.95rem;
+    font-family: inherit;
+  }
+
+  #search:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 1px;
+    border-color: var(--focus);
+  }
+
+  .filters {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 0.74rem;
+    letter-spacing: 0.04em;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    border: 1.5px solid var(--line);
+    background: var(--paper-raised);
+    color: var(--ink-soft);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .filter-btn:hover { border-color: var(--ink-soft); }
+
+  .filter-btn.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+
+  .filter-btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  .count {
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+    margin: 0.9rem 0 1.4rem;
+  }
+
+  .card {
+    background: var(--paper-raised);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    margin-bottom: 1.1rem;
+    overflow: hidden;
+  }
+
+  .card-head {
+    padding: 1.1rem 1.3rem 0.9rem;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .term {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    font-size: 1.4rem;
+    margin: 0;
+    letter-spacing: -0.005em;
+  }
+
+  .rattsomrade {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.22rem 0.5rem;
+    white-space: nowrap;
+  }
+
+  .panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (max-width: 620px) {
+    .panels { grid-template-columns: 1fr; }
+  }
+
+  .panel {
+    padding: 0.95rem 1.3rem 1.1rem;
+  }
+
+  .panel.vardag {
+    background: var(--ochre-soft);
+    border-top: 3px solid var(--ochre-line);
+  }
+
+  .panel.juridik {
+    background: var(--navy-soft);
+    border-top: 3px solid var(--navy-line);
+    border-left: 1px solid var(--line);
+  }
+
+  @media (max-width: 620px) {
+    .panel.juridik { border-left: none; border-top: 3px solid var(--navy-line); }
+  }
+
+  .panel-label {
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0 0 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .panel.vardag .panel-label { color: var(--ochre); }
+  .panel.juridik .panel-label { color: var(--navy); }
+
+  .panel p {
+    margin: 0;
+    font-size: 0.93rem;
+    color: var(--ink);
+  }
+
+  .gap-bridge {
+    padding: 0.85rem 1.3rem;
+    background: var(--gap-bg);
+    border-top: 1px solid var(--gap-border);
+    border-bottom: 1px solid var(--gap-border);
+    font-size: 0.88rem;
+    display: flex;
+    gap: 0.55rem;
+    align-items: flex-start;
+  }
+
+  .gap-bridge .icon {
+    flex: none;
+    font-family: ui-monospace, monospace;
+    color: var(--ochre);
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  .gap-bridge strong { font-weight: 650; }
+
+  .example {
+    padding: 0.85rem 1.3rem 1.1rem;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    font-style: italic;
+  }
+
+  .example strong {
+    font-style: normal;
+    color: var(--ink);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 0.35rem;
+  }
+
+  .empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.82rem;
+    color: var(--ink-soft);
+  }
+
+  footer a { color: var(--navy); }
+
+  .contribute-strip {
+    margin-top: 2.5rem;
+    padding: 1.4rem 1.5rem;
+    border: 1.5px dashed var(--line);
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .contribute-strip p {
+    margin: 0;
+    font-size: 0.9rem;
+    max-width: 46ch;
+  }
+
+  .contribute-strip .fake-btn {
+    font-size: 0.85rem;
+    padding: 0.55rem 1rem;
+    border-radius: 7px;
+    border: 1.5px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    white-space: nowrap;
+    cursor: default;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .card { transition: border-color 0.15s ease; }
+  }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <div class="eyebrow"><span class="dot"></span>klarspråk.denied.se · komplement till politiker.denied.se</div>
+    <h1>Klarspråk — vad institutionen <em>menar</em>, vad du <em>tror</em></h1>
+    <p class="lede">En översättning mellan juridiskt fackspråk och vardagssvenska. Varje term visar gapet mellan hur en vanlig medborgare rimligen tolkar ordet och hur domstolar och myndigheter faktiskt tillämpar det.</p>
+    <div class="status-note">
+      <span>⚠</span>
+      <span><strong>Opublicerat utkast.</strong> Innehållet är AI-genererat och väntar på granskning: juridisk sakkontroll och avstämning av vardagsbetydelsen mot seriösa uppslagsverk (SO/SAOL, NE, Wiktionary). Ingen av dessa definitioner ska betraktas som auktoritativa ännu.</span>
+    </div>
+  </header>
+
+  <div class="controls">
+    <input id="search" type="text" placeholder="Sök term, t.ex. &quot;häktning&quot; eller &quot;praxis&quot;…" autocomplete="off" />
+    <div class="filters" id="filters"></div>
+  </div>
+
+  <p class="count" id="count"></p>
+  <div id="list"></div>
+
+  <div class="contribute-strip">
+    <p><strong>Föreslå en term.</strong> I den riktiga versionen kan vem som helst föreslå begrepp och definitioner — varje bidrag granskas av en människa innan publicering, oavsett om förslaget kom från AI eller en besökare.</p>
+    <button class="fake-btn" type="button" disabled>Föreslå term (kommer snart)</button>
+  </div>
+
+  <footer>
+    Prototyp byggd som underlag för diskussion. Rättsområdes-taggar och exempel är förenklingar i pedagogiskt syfte, inte juridisk rådgivning.
+  </footer>
+</div>
+
+<script>
+  const TERMS = [
+  {
+    "term": "Bortom rimligt tvivel",
+    "rattsomrade": "Straffrätt",
+    "juridisk_definition": "Det beviskrav som krävs för fällande dom i brottmål – domstolen får inte döma om det finns rimligt tvivel om den tilltalades skuld.",
+    "vad_manniskor_tror": "Att åklagaren måste bevisa \"hundra procent säkert\" och utan minsta tvivel att någon är skyldig.",
+    "praktisk_tillampning": "I praktiken krävs inte absolut visshet, utan att alla rimliga alternativa förklaringar är uteslutna efter en helhetsbedömning av bevisningens styrka.",
+    "skillnad": "Allmänheten tror på absolut säkerhet, men rätten kräver bara att rimligt tvivel är undanröjt, inte allt tänkbart tvivel.",
+    "exempel": "En person frias trots stark misstanke, om det finns en trovärdig alternativ förklaring till händelsen."
+  },
+  {
+    "term": "Skälig misstanke",
+    "rattsomrade": "Straffrätt",
+    "juridisk_definition": "En av flera misstankegrader i straffprocessen, näst lägst i graderingen, som ger polis och åklagare rätt att använda vissa tvångsmedel som husrannsakan och beslag.",
+    "vad_manniskor_tror": "Att man nästan säkert är skyldig, eller att bevisen redan pekar starkt mot en specifik person.",
+    "praktisk_tillampning": "Är en relativt låg bevisnivå – konkreta omständigheter som objektivt talar för delaktighet i brott, klart under nivån som krävs för åtal eller häktning.",
+    "skillnad": "Uttrycket låter mer avgörande än det är – det är en förhållandevis låg tröskel för att inleda tvångsåtgärder, inte ett ställningstagande om skuld.",
+    "exempel": "Polisen kan husrannsaka en bostad utifrån skälig misstanke utan att personen senare ens delges misstanke om brott."
+  },
+  {
+    "term": "In dubio pro reo",
+    "rattsomrade": "Straffrätt",
+    "juridisk_definition": "Latinsk princip – \"vid tvivel, till förmån för den anklagade\" – som innebär att osäkerhet i bevisläget ska falla den tilltalade till godo.",
+    "vad_manniskor_tror": "Att uttrycket bara är en fin term för att \"man är oskyldig tills motsatsen bevisats\".",
+    "praktisk_tillampning": "Principen kompletterar beviskravet bortom rimligt tvivel och avgör konkret hur domstolen ska värdera delad eller motstridig bevisning i det enskilda målet.",
+    "skillnad": "Principen upplevs som en allmän rättvisetanke, men är i praktiken ett tekniskt verktyg för domstolens bevisvärdering i oklara fall.",
+    "exempel": "Om två vittnesmål motsäger varandra och inget kan styrkas ytterligare ska den tolkning som gynnar den tilltalade väljas."
+  },
+  {
+    "term": "Uppsåt",
+    "rattsomrade": "Straffrätt",
+    "juridisk_definition": "Det subjektiva rekvisit (avsikt eller vetskap) som i regel krävs för straffansvar – att gärningsmannen begått gärningen medvetet, till skillnad från oaktsamhet.",
+    "vad_manniskor_tror": "Att uppsåt bara betyder att man planerat eller medvetet velat orsaka det som skedde.",
+    "praktisk_tillampning": "Uppsåt omfattar flera grader, från avsiktsuppsåt till likgiltighetsuppsåt, där det räcker att gärningsmannen varit likgiltig inför risken att en effekt skulle inträffa.",
+    "skillnad": "Allmänheten tänker sig uppsåt som medveten planering, men ofta räcker det att personen accepterade en risk utan att aktivt önska utfallet.",
+    "exempel": "Den som kör grovt vårdslöst och är likgiltig för risken att skada någon kan dömas för uppsåtligt brott, trots att skadan inte var avsedd."
+  },
+  {
+    "term": "Oaktsamhet",
+    "rattsomrade": "Straffrätt",
+    "juridisk_definition": "Ett subjektivt rekvisit som innebär att gärningsmannen inte varit tillräckligt aktsam, utan att för den skull haft uppsåt till gärningen.",
+    "vad_manniskor_tror": "Att oaktsamhet bara är \"slarv\" och därmed en lindrig och närmast ursäktlig grund för ansvar.",
+    "praktisk_tillampning": "Oaktsamhetsbrott kan ändå leda till fängelsestraff, och bedömningen görs utifrån vad en normalt aktsam person borde ha gjort i motsvarande situation.",
+    "skillnad": "Ordet låter harmlöst i vardagsspråk, men grov oaktsamhet kan straffas nästan lika allvarligt som avsiktliga handlingar.",
+    "exempel": "Att somna vid ratten och orsaka en dödsolycka kan bedömas som grov oaktsamhet, inte en ren olyckshändelse utan ansvar."
+  },
+  {
+    "term": "Strafföreläggande",
+    "rattsomrade": "Straffrätt",
+    "juridisk_definition": "Ett förenklat förfarande där åklagaren utan rättegång förelägger böter eller villkorlig dom, vilket blir en dom när den misstänkte godkänner det.",
+    "vad_manniskor_tror": "Att det bara är en \"bot\" liknande en parkeringsavgift som man kan strunta i eller förhandla om.",
+    "praktisk_tillampning": "Ett godkänt strafföreläggande registreras i belastningsregistret precis som en vanlig dom och kan påverka exempelvis anställning eller viseringsansökningar.",
+    "skillnad": "Det upplevs som en informell uppgörelse, men har juridiskt samma verkan som en fällande brottmålsdom.",
+    "exempel": "Den som godkänner ett strafföreläggande för snatteri får en notering i belastningsregistret, trots att ingen rättegång hållits."
+  },
+  {
+    "term": "Villkorlig dom",
+    "rattsomrade": "Straffrätt",
+    "juridisk_definition": "En påföljd där den dömde slipper omedelbart verkställa fängelsestraff under förutsättning att inga nya brott begås under en prövotid, ofta kombinerad med böter eller samhällstjänst.",
+    "vad_manniskor_tror": "Att det betyder att man \"kommer undan\" helt eller att domen inte räknas som en riktig brottspåföljd.",
+    "praktisk_tillampning": "Det är en fullvärdig påföljd som registreras i belastningsregistret, och nya brott under prövotiden kan leda till att fängelsestraffet ändå verkställs.",
+    "skillnad": "Allmänheten uppfattar det som ett nästintill friande utfall, men det är en dom med verkliga konsekvenser vid återfall.",
+    "exempel": "Den som får villkorlig dom för misshandel och begår ett nytt brott inom prövotiden riskerar att båda brotten leder till fängelse."
+  },
+  {
+    "term": "Häktning",
+    "rattsomrade": "Straffrätt",
+    "juridisk_definition": "Ett straffprocessuellt tvångsmedel där en person på sannolika skäl misstänkt för brott frihetsberövas inför eller under en rättegång, beslutat av domstol efter yrkande från åklagare.",
+    "vad_manniskor_tror": "Att häktning innebär att personen redan är dömd eller att skulden är fastställd.",
+    "praktisk_tillampning": "Häktning är en säkerhetsåtgärd under utredning eller rättegång, grundad på hög misstankegrad plus särskilda häktningsskäl som flykt- eller kollusionsfara – ingen skuldbedömning görs.",
+    "skillnad": "Ordet ger sken av fastställd skuld, men häktning är en process- och säkerhetsåtgärd som kan följas av en friande dom.",
+    "exempel": "En person kan sitta häktad i månader under en utredning och sedan frias helt vid rättegången."
+  },
+  {
+    "term": "Förundersökning",
+    "rattsomrade": "Straffrätt",
+    "juridisk_definition": "Polisens och åklagarens utredning av ett misstänkt brott, för att avgöra om åtal ska väckas, styrd av objektivitetsprincipen.",
+    "vad_manniskor_tror": "Att en pågående förundersökning i sig betyder att polisen är övertygad om att den utredde är skyldig.",
+    "praktisk_tillampning": "Förundersökningen ska enligt lag bedrivas objektivt och även utreda omständigheter till den misstänktes fördel, och kan när som helst läggas ned utan att leda till åtal.",
+    "skillnad": "Allmänheten tolkar en pågående förundersökning som ett tecken på skuld, medan den juridiskt är en neutral utredningsfas som ofta läggs ned.",
+    "exempel": "En förundersökning mot en person kan läggas ned utan åtal, trots att omgivningen redan hunnit uppfatta personen som skyldig."
+  },
+  {
+    "term": "Myndighetsutövning",
+    "rattsomrade": "Förvaltningsrätt",
+    "juridisk_definition": "Beslut eller åtgärder som en myndighet vidtar med stöd av offentligrättslig makt, ensidigt bindande för den enskilde, t.ex. tillstånd, förbud eller bidragsbeslut.",
+    "vad_manniskor_tror": "Att det bara är ett allmänt ord för att myndigheter sköter administration eller service.",
+    "praktisk_tillampning": "Endast beslut som är ett uttryck för samhällets maktbefogenhet gentemot enskilda räknas, vilket bland annat styr skadeståndsansvar och överklagbarhet.",
+    "skillnad": "Ordet låter som en teknikalitet, men avgränsningen avgör konkret vilka rättigheter den enskilde har mot staten.",
+    "exempel": "Ett avslag på bygglov är myndighetsutövning, medan kommunens gatustädning normalt inte är det."
+  },
+  {
+    "term": "Proportionalitet",
+    "rattsomrade": "Förvaltningsrätt",
+    "juridisk_definition": "En rättsprincip som innebär att en myndighetsåtgärd inte får vara mer ingripande än vad som är nödvändigt för att uppnå det avsedda syftet.",
+    "vad_manniskor_tror": "Att proportionalitet bara betyder allmän \"rimlighet\", ett löst argument som kan åberopas mot i princip vilket beslut som helst.",
+    "praktisk_tillampning": "Domstolar prövar proportionalitet genom en strukturerad avvägning av åtgärdens lämplighet, nödvändighet och nytta i förhållande till skadan för den enskilde.",
+    "skillnad": "Termen upplevs som ett vagt rättvisebegrepp, men tillämpas som en strikt, flerstegs prövning som sällan river ett beslut med lagligt syfte.",
+    "exempel": "Ett vitesföreläggande kan upphävas som oproportionerligt om samma resultat kunnat uppnås med en mindre ingripande åtgärd."
+  },
+  {
+    "term": "Tjänstefel",
+    "rattsomrade": "Förvaltningsrätt",
+    "juridisk_definition": "Ett brott enligt brottsbalken som innebär att en person vid myndighetsutövning genom handling eller underlåtenhet åsidosätter vad som gäller för uppgiften, om det inte är ringa.",
+    "vad_manniskor_tror": "Att alla misstag, felaktiga beslut eller dålig service från en tjänsteman utgör tjänstefel som går att polisanmäla med framgång.",
+    "praktisk_tillampning": "Tröskeln är hög – vanliga felbedömningar räknas sällan som tjänstefel, och de allra flesta anmälningar leder inte till åtal eller fällande dom.",
+    "skillnad": "Allmänheten ser tjänstefel som ett brett skydd mot myndigheters misstag, men det kräver rättsligt ett tydligt åsidosättande som sällan blir framgångsrikt att driva.",
+    "exempel": "En handläggare som fattar ett felaktigt men rimligt motiverat beslut gör sig normalt inte skyldig till tjänstefel, även om beslutet senare upphävs."
+  },
+  {
+    "term": "Jäv",
+    "rattsomrade": "Förvaltningsrätt",
+    "juridisk_definition": "En omständighet som gör att en tjänsteman eller ledamot inte får delta i handläggningen av ett ärende på grund av risk för partiskhet, t.ex. släktskap eller eget intresse i utgången.",
+    "vad_manniskor_tror": "Att jäv bara handlar om att vara nära vän eller släkt med den som berörs av beslutet.",
+    "praktisk_tillampning": "Jävsreglerna omfattar flera typer av jäv och prövas objektivt utifrån hur situationen framstår utåt, inte om personen faktiskt agerat partiskt.",
+    "skillnad": "Allmänheten tänker sig jäv som faktisk partiskhet, medan reglerna även slår till redan vid enbart skenet av partiskhet.",
+    "exempel": "En kommunal tjänsteman som handlägger ett bygglovsärende som rör grannens fastighet kan vara jävig utan att ha agerat partiskt."
+  },
+  {
+    "term": "Sekretess",
+    "rattsomrade": "Förvaltningsrätt",
+    "juridisk_definition": "Ett rättsligt förbud mot att röja en uppgift, reglerat i offentlighets- och sekretesslagen och kopplat till specifika sekretessbestämmelser för olika ärendetyper.",
+    "vad_manniskor_tror": "Att sekretess betyder att en uppgift är hemlig i absolut mening och aldrig kan lämnas ut till någon.",
+    "praktisk_tillampning": "Sekretess kräver ett specifikt sekretesskydd och ofta en skadeprövning – samma uppgift kan hemlighållas för vissa mottagare men lämnas ut till andra, t.ex. den enskilde själv.",
+    "skillnad": "Ordet \"hemligt\" i vardagsspråk är absolut, men juridisk sekretess är alltid villkorad och prövas i varje enskilt utlämnande.",
+    "exempel": "En journalist kan nekas en handling på grund av sekretess, medan personen uppgifterna gäller ofta har rätt att få del av samma handling."
+  },
+  {
+    "term": "Meddelarfrihet",
+    "rattsomrade": "Förvaltningsrätt",
+    "juridisk_definition": "Grundlagsskyddad rätt för bland andra anställda i offentlig sektor att lämna uppgifter till media för publicering, med skydd mot efterforskning och repressalier, trots sekretess i vissa fall.",
+    "vad_manniskor_tror": "Att meddelarfrihet ger en obegränsad rätt att läcka vilken information som helst utan konsekvenser.",
+    "praktisk_tillampning": "Meddelarfriheten bryter i regel sekretess för själva uppgiftslämnandet, men har viktiga undantag och skyddar inte den som lämnar ut en hemlig handling i original.",
+    "skillnad": "Meddelarfriheten uppfattas som total, men har undantag och skiljer sig från rätten att sprida en handling i sig.",
+    "exempel": "En anställd kan muntligen berätta för en journalist om missförhållanden, men riskerar ändå ansvar för att kopiera och lämna ut en sekretessbelagd handling."
+  },
+  {
+    "term": "Offentlighetsprincipen",
+    "rattsomrade": "Förvaltningsrätt",
+    "juridisk_definition": "Grundlagsfäst princip om allmänhetens rätt att ta del av allmänna, offentliga handlingar hos myndigheter, med sekretesslagen som huvudsaklig begränsning.",
+    "vad_manniskor_tror": "Att man alltid har rätt att direkt och utan dröjsmål få se precis vilka handlingar som helst hos en myndighet.",
+    "praktisk_tillampning": "Rätten gäller allmänna handlingar utan sekretess, och myndigheten ska pröva utlämnandet skyndsamt men kan sekretessgranska, maskera delar av handlingen eller ta ut avgift.",
+    "skillnad": "Principen framstår som en absolut rättighet, men är i praktiken en huvudregel med ett omfattande sekretessregelverk som begränsar den i enskilda fall.",
+    "exempel": "En begäran om att få ut en myndighets e-post kan delvis avslås om vissa uppgifter omfattas av sekretess, medan resten lämnas ut."
+  },
+  {
+    "term": "Delegation",
+    "rattsomrade": "Förvaltningsrätt",
+    "juridisk_definition": "Att en myndighets beslutanderätt i vissa ärendetyper överlåts till en tjänsteman eller ett organ genom en delegationsordning, medan beslutet formellt fattas för myndighetens räkning.",
+    "vad_manniskor_tror": "Att ett delegerat beslut är mindre officiellt eller mindre bindande än ett beslut fattat av hela myndigheten eller nämnden.",
+    "praktisk_tillampning": "Ett beslut fattat inom ramen för en giltig delegation har samma rättsverkan och överklagbarhet som om det fattats av det överordnade organet.",
+    "skillnad": "Allmänheten kan tro att ett delegerat beslut är provisoriskt, men det är juridiskt fullt bindande från dag ett.",
+    "exempel": "Ett bygglov beviljat av en enskild handläggare enligt kommunens delegationsordning är lika giltigt som om nämnden själv fattat beslutet."
+  },
+  {
+    "term": "Omprövning",
+    "rattsomrade": "Förvaltningsrätt",
+    "juridisk_definition": "Att den beslutande myndigheten på nytt prövar ett eget beslut, ofta efter begäran, och kan ändra det om det är uppenbart oriktigt.",
+    "vad_manniskor_tror": "Att omprövning är samma sak som att överklaga till en domstol, eller att myndigheten är skyldig att ändra beslutet bara för att den enskilde är missnöjd.",
+    "praktisk_tillampning": "Omprövning sker hos samma myndighet som fattat det ursprungliga beslutet och leder sällan till en annan utgång om inte nya uppgifter tillkommit.",
+    "skillnad": "Ordet låter som en oberoende ny prövning, men det är samma myndighet som granskar sitt eget beslut innan ärendet eventuellt går vidare till domstol.",
+    "exempel": "En begäran om omprövning av ett skattebeslut prövas av Skatteverket självt, innan ärendet eventuellt kan överklagas vidare."
+  },
+  {
+    "term": "Uppehållstillstånd",
+    "rattsomrade": "Migrationsrätt",
+    "juridisk_definition": "Ett myndighetsbeslut som ger en utländsk medborgare rätt att vistas och i regel arbeta i Sverige under viss tid eller permanent, enligt utlänningslagen.",
+    "vad_manniskor_tror": "Att uppehållstillstånd i princip är samma sak som medborgarskap, eller att ett beviljat tillstånd är permanent och oåterkalleligt.",
+    "praktisk_tillampning": "De flesta uppehållstillstånd är tidsbegränsade och villkorade, t.ex. av fortsatt anställning eller kvarstående skyddsbehov, och kan omprövas eller upphöra.",
+    "skillnad": "Uppfattningen är att tillståndet ger en permanent, trygg status, men verkligheten är ofta återkommande omprövningar och osäkerhet inför förlängning.",
+    "exempel": "Ett tidsbegränsat arbetstillstånd kan upphöra att gälla om personen blir arbetslös under prövotiden, trots flera års vistelse i Sverige."
+  },
+  {
+    "term": "Synnerligen ömmande omständigheter",
+    "rattsomrade": "Migrationsrätt",
+    "juridisk_definition": "En undantagsgrund i utlänningslagen som i mycket speciella fall kan ge uppehållstillstånd utan asylskäl, om avslag skulle vara särskilt påfrestande, t.ex. vid allvarlig sjukdom eller stark anknytning ett barn fått till Sverige.",
+    "vad_manniskor_tror": "Att bestämmelsen är en bred skälighetsventil som ger uppehållstillstånd i alla svåra eller synd-om-fall.",
+    "praktisk_tillampning": "Bestämmelsen tillämpas mycket restriktivt – varken allmän social eller ekonomisk svårighet räcker, utan omständigheterna ska vara exceptionella och individuellt prövade.",
+    "skillnad": "Ordet \"synnerligen\" signalerar undantag redan i lagtexten, men allmänheten uppfattar ofta grunden som mer tillgänglig än den restriktiva praxis som faktiskt tillämpas.",
+    "exempel": "En svårt sjuk person kan nekas tillstånd trots allvarlig diagnos, om vård bedöms tillgänglig även i hemlandet."
+  },
+  {
+    "term": "Verkställighetshinder",
+    "rattsomrade": "Migrationsrätt",
+    "juridisk_definition": "Omständigheter som gör att ett beslut om avvisning eller utvisning inte kan verkställas, t.ex. att det skulle strida mot skyddsbehov eller vara praktiskt omöjligt.",
+    "vad_manniskor_tror": "Att om en avvisning \"hindras\" av något skäl så upphävs beslutet helt och personen får stanna permanent.",
+    "praktisk_tillampning": "Ett verkställighetshinder pausar ofta bara verkställigheten tillfälligt, och myndigheten kan pröva frågan på nytt när hindret upphör – avvisningsbeslutet kan fortsätta gälla i grunden.",
+    "skillnad": "Ett hinder låter definitivt, men det handlar ofta om ett tillfälligt uppskov snarare än att beslutet försvinner.",
+    "exempel": "En person vars hemland saknar fungerande mottagning för återvändande kan få verkställigheten uppskjuten, utan att avvisningsbeslutet upphävs."
+  },
+  {
+    "term": "Avvisning",
+    "rattsomrade": "Migrationsrätt",
+    "juridisk_definition": "Ett beslut om att en utlänning inte får resa in i eller stanna kvar i Sverige, fattat relativt kort tid efter ankomst eller ansökan, till skillnad från utvisning som normalt beslutas senare eller efter brott.",
+    "vad_manniskor_tror": "Att avvisning och utvisning är samma sak eller bara olika ord för att bli \"utkastad\" ur landet.",
+    "praktisk_tillampning": "Avvisning och utvisning har olika rättslig grund, tidsgräns och beslutande instans, vilket bland annat påverkar överklagandemöjligheter och återreseförbud.",
+    "skillnad": "Orden används synonymt i vardagsspråk, men den juridiska skillnaden avgör vilket regelverk, vilken instans och vilka tidsfrister som gäller.",
+    "exempel": "En asylsökande vars ansökan avslås relativt snart efter ankomst avvisas, medan en person som senare döms för grovt brott istället kan utvisas."
+  },
+  {
+    "term": "Asylskäl",
+    "rattsomrade": "Migrationsrätt",
+    "juridisk_definition": "De grunder – välgrundad fruktan för förföljelse på grund av bland annat ras, religion eller politisk uppfattning, eller annat skyddsbehov – som kan ge rätt till asyl eller alternativ skyddsstatus.",
+    "vad_manniskor_tror": "Att fattigdom, ett allmänt krig eller en önskan om ett bättre liv i sig räcker som asylskäl.",
+    "praktisk_tillampning": "Bedömningen är individuell och kräver att den sökande gör sannolikt att just hen personligen riskerar förföljelse eller allvarlig skada, inte enbart att läget i hemlandet är svårt generellt.",
+    "skillnad": "Allmänheten likställer ofta svåra levnadsförhållanden med asylskäl, men rätten kräver en individuell, personlig hotbild kopplad till specifika skyddsgrunder.",
+    "exempel": "Att komma från ett land i väpnad konflikt räcker inte i sig – den sökande måste visa en individuell risk utöver den allmänna säkerhetssituationen."
+  },
+  {
+    "term": "Säkert ursprungsland",
+    "rattsomrade": "Migrationsrätt",
+    "juridisk_definition": "Ett land som klassificeras som i regel tryggt för dess medborgare, vilket kan leda till att asylansökan handläggs i ett snabbare, förenklat förfarande.",
+    "vad_manniskor_tror": "Att en person från ett \"säkert land\" automatiskt nekas asyl utan individuell prövning.",
+    "praktisk_tillampning": "Klassificeringen påverkar handläggningens hastighet och bevisbörda, men varje ansökan ska ändå prövas individuellt och kan beviljas om personliga skyddsskäl visas.",
+    "skillnad": "Ordet \"säkert\" ger intryck av kollektivt, automatiskt avslag, men lagen kräver fortsatt individuell prövning, om än med skärpta krav.",
+    "exempel": "En sökande från ett land klassat som säkert kan ändå beviljas asyl om hen visar en trovärdig, individuell hotbild."
+  },
+  {
+    "term": "Uppehållsrätt",
+    "rattsomrade": "Migrationsrätt",
+    "juridisk_definition": "Den rätt EU/EES-medborgare och deras anhöriga har att vistas i Sverige längre än tre månader utan uppehållstillstånd, grundad direkt på EU-rätten under förutsättning att t.ex. arbete eller tillräckliga medel finns.",
+    "vad_manniskor_tror": "Att uppehållsrätt är samma sak som uppehållstillstånd, bara med ett annat namn för EU-medborgare.",
+    "praktisk_tillampning": "Uppehållsrätt uppstår automatiskt när villkoren är uppfyllda och kräver inget beslut, men kan tyst upphöra om t.ex. arbete och andra medel saknas.",
+    "skillnad": "Till skillnad från uppehållstillstånd är uppehållsrätten inte ett beslut man kan luta sig mot – den kan upphöra utan att något formellt beslut fattas.",
+    "exempel": "En EU-medborgare som förlorar sitt jobb och saknar andra medel kan förlora sin uppehållsrätt utan att något myndighetsbeslut fattats om saken."
+  },
+  {
+    "term": "Förvar",
+    "rattsomrade": "Migrationsrätt",
+    "juridisk_definition": "Ett frihetsberövande enligt utlänningslagen av en person i en migrationsprocess, t.ex. för att säkerställa verkställighet av ett avvisnings- eller utvisningsbeslut eller för att utreda identitet.",
+    "vad_manniskor_tror": "Att förvar är samma sak som fängelse, en straffpåföljd för att personen begått ett brott.",
+    "praktisk_tillampning": "Förvar är inte ett straff utan en administrativ tvångsåtgärd, tidsbegränsad och med krav på fortlöpande domstolsprövning, och kan tillämpas även på personer som inte begått brott.",
+    "skillnad": "Ordet upplevs som en form av fängelsestraff, men rättsligt är det en administrativ säkerhetsåtgärd, inte ett straff för brott.",
+    "exempel": "En person kan tas i förvar inför en avvisning trots att hen aldrig dömts för något brott i Sverige."
+  },
+  {
+    "term": "Praxis",
+    "rattsomrade": "Processrätt",
+    "juridisk_definition": "Vägledande avgöranden, främst från högsta instans, som ger auktoritativ tolkning av hur en lagregel ska tillämpas i liknande fall.",
+    "vad_manniskor_tror": "Att praxis bara betyder \"hur det brukar bli\" eller en allmän uppfattning om vad som är vanligt, ungefär som en tumregel.",
+    "praktisk_tillampning": "Prejudicerande praxis är i praktiken bindande vägledning som lägre domstolar och myndigheter förväntas följa, och avvikelser kräver särskild motivering.",
+    "skillnad": "Ordet låter löst och informellt, men prejudicerande praxis fungerar i praktiken nästan som lag för hur ett begrepp ska tolkas.",
+    "exempel": "En förvaltningsrätt dömer likadant i ett nytt ärende som i ett tidigare avgörande från Högsta förvaltningsdomstolen, trots att omständigheterna skiljer sig något."
+  },
+  {
+    "term": "Laga kraft",
+    "rattsomrade": "Processrätt",
+    "juridisk_definition": "Den tidpunkt då en dom eller ett beslut inte längre kan överklagas genom ordinära rättsmedel och därmed blir slutgiltigt gällande.",
+    "vad_manniskor_tror": "Att \"laga kraft\" betyder att beslutet är extra rättvist eller grundligt granskat, snarare än att överklagandetiden bara löpt ut.",
+    "praktisk_tillampning": "Laga kraft inträder oftast automatiskt efter en viss tidsfrist om ingen överklagar, oavsett hur välgrundat beslutet var, och kan bara brytas i undantagsfall som resning.",
+    "skillnad": "Ordet ger intryck av en kvalitetsstämpel, men laga kraft handlar i grunden bara om att en tidsfrist passerat utan överklagande.",
+    "exempel": "Ett bygglovsbeslut vinner laga kraft bara för att ingen granne överklagade i tid, inte för att beslutet varit särskilt väl genomlyst."
+  },
+  {
+    "term": "Resning",
+    "rattsomrade": "Processrätt",
+    "juridisk_definition": "Ett extraordinärt rättsmedel som gör det möjligt att riva upp en dom som vunnit laga kraft, om t.ex. nya omständigheter eller bevis framkommit som sannolikt skulle lett till en annan utgång.",
+    "vad_manniskor_tror": "Att resning är en vanlig \"andra chans\" man kan begära vid missnöje med en dom.",
+    "praktisk_tillampning": "Resning beviljas mycket sällan och kräver starka, konkreta skäl som inte kunde åberopas i den ursprungliga processen.",
+    "skillnad": "Allmänheten ser resning som en tillgänglig sista utväg, men den är i praktiken en extremt restriktivt tillämpad undantagsåtgärd.",
+    "exempel": "En dömd person kan beviljas resning om ny teknisk bevisning senare visar att gärningsmannen var någon annan, men inte bara för att ett nytt vittne tycker annorlunda."
+  },
+  {
+    "term": "Bevisbörda",
+    "rattsomrade": "Processrätt",
+    "juridisk_definition": "Regeln om vilken part i en process som har att bevisa en viss omständighet för att vinna framgång med sitt yrkande, och som avgör utgången om bevisläget är oklart.",
+    "vad_manniskor_tror": "Att bevisbördan alltid ligger på \"den som anklagar\", oavsett måltyp, precis som i ett brottmål.",
+    "praktisk_tillampning": "Bevisbördans placering varierar mellan måltyper – i förvaltningsmål har den enskilde ofta ett eget ansvar att göra sina uppgifter sannolika, t.ex. i asylärenden.",
+    "skillnad": "Bilden av att den som anklagar alltid bevisar allt stämmer bara för brottmål – andra måltyper har helt andra regler för vem som ska styrka vad.",
+    "exempel": "I ett migrationsärende är det i hög grad den sökande själv som måste göra sitt skyddsbehov sannolikt, till skillnad från ett brottmål där åklagaren bär hela bevisbördan."
+  },
+  {
+    "term": "Sannolika skäl",
+    "rattsomrade": "Processrätt",
+    "juridisk_definition": "Den högsta misstankegraden i straffprocessen, som bland annat krävs för häktning – en högre grad av misstanke än \"skäligen misstänkt\".",
+    "vad_manniskor_tror": "Att \"sannolika skäl\" bara betyder att något är \"troligt\" i vardaglig mening, ungefär hälften eller strax över.",
+    "praktisk_tillampning": "Kravet innebär att sannolikheten för skuld ska vara klart högre än för oskuld, men det är fortfarande lägre än det slutliga beviskravet bortom rimligt tvivel som krävs för fällande dom.",
+    "skillnad": "Ordet \"sannolika\" låter avslappnat vardagligt, men det är en specifik, förhållandevis hög juridisk misstankenivå mellan låg misstanke och fällande bevisning.",
+    "exempel": "En person kan häktas på sannolika skäl misstänkt för mord och ändå senare frias vid rättegången när det fulla beviskravet prövas."
+  },
+  {
+    "term": "Överklagande",
+    "rattsomrade": "Processrätt",
+    "juridisk_definition": "Den formella rätten att begära att en högre instans prövar ett beslut på nytt, inom en angiven tidsfrist.",
+    "vad_manniskor_tror": "Att man alltid har obegränsad rätt att överklaga hur långt som helst i instanskedjan och få en ny fullständig prövning.",
+    "praktisk_tillampning": "Överklaganden är ofta tidsbegränsade till några veckor, och i högre instanser krävs ofta prövningstillstånd för att målet överhuvudtaget ska tas upp.",
+    "skillnad": "Rätten att överklaga uppfattas som obegränsad, men stoppas i praktiken ofta redan av tidsfrister eller krav på prövningstillstånd innan sakfrågan berörs.",
+    "exempel": "Ett överklagande som lämnas in en dag för sent avvisas normalt utan att domstolen alls prövar om beslutet var korrekt."
+  },
+  {
+    "term": "Prövningstillstånd",
+    "rattsomrade": "Processrätt",
+    "juridisk_definition": "Ett krav i vissa måltyper och instanser att domstolen först måste besluta att ta upp målet till full prövning innan sakfrågan avgörs.",
+    "vad_manniskor_tror": "Att prövningstillstånd bara är en formsak eller administrativ registrering som i praktiken alltid beviljas.",
+    "praktisk_tillampning": "Prövningstillstånd nekas i en stor andel av ärendena, vilket innebär att underinstansens avgörande då står fast utan att sakfrågan prövas igen.",
+    "skillnad": "Steget upplevs som en formalitet, men är i praktiken en verklig spärr som stoppar de flesta mål från en ny, fullständig prövning.",
+    "exempel": "En part vars överklagande nekas prövningstillstånd i hovrätten får aldrig sin sak omprövad i sak, trots att man formellt överklagat."
+  },
+  {
+    "term": "Rättskraft",
+    "rattsomrade": "Processrätt",
+    "juridisk_definition": "Principen att en dom som vunnit laga kraft binder parterna och hindrar att samma sak prövas på nytt i en ny rättegång.",
+    "vad_manniskor_tror": "Att rättskraft bara är ett annat ord för laga kraft, det vill säga att tiden för att överklaga gått ut.",
+    "praktisk_tillampning": "Rättskraft handlar specifikt om att samma fråga mellan samma parter inte kan prövas igen, och avgränsningen av vad som är \"samma sak\" kan vara avgörande för om ett nytt mål alls tas upp.",
+    "skillnad": "Begreppen förväxlas ofta, men rättskraft handlar om spärren mot att pröva samma sak igen, medan laga kraft handlar om att överklagandetiden löpt ut.",
+    "exempel": "Den som förlorat ett skadeståndsmål kan inte väcka en ny identisk talan mot samma motpart bara för att man hittar nya argument för samma krav."
+  },
+  {
+    "term": "Muntlig förhandling",
+    "rattsomrade": "Processrätt",
+    "juridisk_definition": "Ett sammanträde där parter och vittnen hörs muntligt inför domstolen, till skillnad från ett avgörande enbart på handlingarna, vanligt i förvaltningsprocessen på begäran av part.",
+    "vad_manniskor_tror": "Att man i princip alltid har rätt att muntligen berätta sin sak personligen inför domstolen innan ett beslut fattas.",
+    "praktisk_tillampning": "I förvaltningsprocessen är huvudregeln skriftlig handläggning, och domstolen kan avslå en begäran om muntlig förhandling om den bedöms obehövlig för utredningen.",
+    "skillnad": "Många förväntar sig att alltid få träffa domaren, men de flesta förvaltningsmål avgörs i praktiken helt skriftligt utan sammanträde.",
+    "exempel": "Ett migrationsmål kan avgöras av domstolen enbart utifrån skriftliga handlingar, utan att den sökande någonsin får träffa domaren personligen."
+  }
+]
+;
+
+  const listEl = document.getElementById('list');
+  const searchEl = document.getElementById('search');
+  const filtersEl = document.getElementById('filters');
+  const countEl = document.getElementById('count');
+
+  const areas = ['Alla', ...new Set(TERMS.map(t => t.rattsomrade))];
+  let activeArea = 'Alla';
+  let query = '';
+
+  function renderFilters() {
+    filtersEl.innerHTML = '';
+    areas.forEach(area => {
+      const btn = document.createElement('button');
+      btn.className = 'filter-btn' + (area === activeArea ? ' active' : '');
+      btn.type = 'button';
+      btn.textContent = area;
+      btn.addEventListener('click', () => { activeArea = area; renderFilters(); renderList(); });
+      filtersEl.appendChild(btn);
+    });
+  }
+
+  function matches(t) {
+    if (activeArea !== 'Alla' && t.rattsomrade !== activeArea) return false;
+    if (!query) return true;
+    const q = query.toLowerCase();
+    return t.term.toLowerCase().includes(q)
+      || t.juridisk_definition.toLowerCase().includes(q)
+      || t.vad_manniskor_tror.toLowerCase().includes(q);
+  }
+
+  function esc(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function renderList() {
+    const filtered = TERMS.filter(matches);
+    countEl.textContent = filtered.length === TERMS.length
+      ? `${TERMS.length} termer`
+      : `${filtered.length} av ${TERMS.length} termer`;
+
+    if (!filtered.length) {
+      listEl.innerHTML = '<div class="empty">Inga termer matchar sökningen.</div>';
+      return;
+    }
+
+    listEl.innerHTML = filtered.map(t => `
+      <article class="card">
+        <div class="card-head">
+          <h2 class="term">${esc(t.term)}</h2>
+          <span class="rattsomrade">${esc(t.rattsomrade)}</span>
+        </div>
+        <div class="panels">
+          <div class="panel vardag">
+            <p class="panel-label">Vad du nog tror</p>
+            <p>${esc(t.vad_manniskor_tror)}</p>
+          </div>
+          <div class="panel juridik">
+            <p class="panel-label">Vad det faktiskt betyder</p>
+            <p>${esc(t.juridisk_definition)}</p>
+          </div>
+        </div>
+        <div class="gap-bridge">
+          <span class="icon">↝</span>
+          <span><strong>Gapet:</strong> ${esc(t.skillnad)}</span>
+        </div>
+        <div class="example">
+          <strong>Exempel</strong>
+          ${esc(t.exempel)}
+        </div>
+      </article>
+    `).join('');
+  }
+
+  searchEl.addEventListener('input', e => { query = e.target.value; renderList(); });
+
+  renderFilters();
+  renderList();
+</script>
