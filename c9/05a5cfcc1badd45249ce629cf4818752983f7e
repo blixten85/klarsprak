@@ -1,0 +1,26 @@
+src/worker.js
+  s_96cd0bd017048c::t_fd559377e46b8b 61-74
+  s_96cd0bd017048c::t_8b3027c1cf0a31 94-101,106-107,116-117
+README.md
+  s_96cd0bd017048c::t_72385a8f68ff68 37-41
+.github/workflows/deploy.yml
+  s_96cd0bd017048c::t_237a9c8990fd7e 14-19
+migrations/0002_add_submitter_ip.sql
+  s_96cd0bd017048c::t_8a8cbd102a1096 1-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "c905a5cfcc1badd45249ce629cf4818752983f7e",
+  "prompts": {},
+  "sessions": {
+    "s_96cd0bd017048c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "32b91534-72ef-4e62-b9d0-d326b1a5c276",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Anders Eriksson <36226327+blixten85@users.noreply.github.com>"
+    }
+  }
+}
