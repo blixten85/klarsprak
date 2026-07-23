@@ -1,0 +1,166 @@
+// klarsprak Worker: serverar statiska assets (public/) och API för
+// community-inlämning + admin-granskning av termförslag.
+//
+// Routes:
+//   POST /api/submit                 publikt, skriver ett förslag med status "pending"
+//   GET  /api/admin/queue            skyddat (Bearer ADMIN_TOKEN), listar pending
+//   POST /api/admin/review/:id       skyddat (Bearer ADMIN_TOKEN), approve/reject
+//   allt annat                       vidarebefordras till ASSETS-binding
+
+const MAX_LEN = {
+  term: 200,
+  foreslagen_juridisk_definition: 4000,
+  foreslagen_vardagsbetydelse: 4000,
+  foreslagen_exempel: 2000,
+  inskickare_namn: 200,
+  inskickare_kommentar: 2000,
+};
+
+function json(data, init = {}) {
+  return new Response(JSON.stringify(data), {
+    ...init,
+    headers: { "content-type": "application/json; charset=utf-8", ...(init.headers || {}) },
+  });
+}
+
+function badRequest(message) {
+  return json({ error: message }, { status: 400 });
+}
+
+function isNonEmptyString(v) {
+  return typeof v === "string" && v.trim().length > 0;
+}
+
+function clean(v) {
+  if (typeof v !== "string") return null;
+  const t = v.trim();
+  return t.length ? t : null;
+}
+
+function validateSubmission(body) {
+  if (!body || typeof body !== "object") return "Ogiltig förfrågan.";
+  if (!isNonEmptyString(body.term)) return "Term krävs.";
+  if (body.term.trim().length > MAX_LEN.term) return `Term får vara max ${MAX_LEN.term} tecken.`;
+
+  const juridisk = clean(body.foreslagen_juridisk_definition);
+  const vardag = clean(body.foreslagen_vardagsbetydelse);
+  if (!juridisk && !vardag) {
+    return "Fyll i minst juridisk definition eller vardagsbetydelse.";
+  }
+
+  for (const [key, max] of Object.entries(MAX_LEN)) {
+    if (key === "term") continue;
+    const val = body[key];
+    if (typeof val === "string" && val.length > max) {
+      return `Fältet "${key}" får vara max ${max} tecken.`;
+    }
+  }
+  return null;
+}
+
+function checkAdminAuth(request, env) {
+  if (!env.ADMIN_TOKEN) return false;
+  const auth = request.headers.get("authorization") || "";
+  const match = auth.match(/^Bearer\s+(.+)$/i);
+  if (!match) return false;
+  return match[1] === env.ADMIN_TOKEN;
+}
+
+async function handleSubmit(request, env) {
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return badRequest("Ogiltig JSON.");
+  }
+
+  const error = validateSubmission(body);
+  if (error) return badRequest(error);
+
+  const now = new Date().toISOString();
+  await env.DB.prepare(
+    `INSERT INTO submissions
+      (term, foreslagen_juridisk_definition, foreslagen_vardagsbetydelse, foreslagen_exempel,
+       inskickare_namn, inskickare_kommentar, status, created_at)
+     VALUES (?, ?, ?, ?, ?, ?, 'pending', ?)`
+  )
+    .bind(
+      body.term.trim(),
+      clean(body.foreslagen_juridisk_definition),
+      clean(body.foreslagen_vardagsbetydelse),
+      clean(body.foreslagen_exempel),
+      clean(body.inskickare_namn),
+      clean(body.inskickare_kommentar),
+      now
+    )
+    .run();
+
+  return json({ ok: true, message: "Tack, ditt förslag granskas innan det publiceras." }, { status: 201 });
+}
+
+async function handleAdminQueue(request, env) {
+  if (!checkAdminAuth(request, env)) {
+    return json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const { results } = await env.DB.prepare(
+    `SELECT * FROM submissions WHERE status = 'pending' ORDER BY created_at ASC`
+  ).all();
+  return json({ submissions: results });
+}
+
+async function handleAdminReview(request, env, id) {
+  if (!checkAdminAuth(request, env)) {
+    return json({ error: "Unauthorized" }, { status: 401 });
+  }
+  const submissionId = Number(id);
+  if (!Number.isInteger(submissionId) || submissionId <= 0) {
+    return badRequest("Ogiltigt id.");
+  }
+
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return badRequest("Ogiltig JSON.");
+  }
+
+  if (body?.action !== "approve" && body?.action !== "reject") {
+    return badRequest('Fältet "action" måste vara "approve" eller "reject".');
+  }
+  const status = body.action === "approve" ? "approved" : "rejected";
+  const note = clean(body.note);
+  const now = new Date().toISOString();
+
+  const result = await env.DB.prepare(
+    `UPDATE submissions SET status = ?, reviewed_at = ?, reviewer_note = ?
+     WHERE id = ? AND status = 'pending'`
+  )
+    .bind(status, now, note, submissionId)
+    .run();
+
+  if (!result.meta.changes) {
+    return json({ error: "Förslaget hittades inte eller är redan granskat." }, { status: 404 });
+  }
+
+  return json({ ok: true, status });
+}
+
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+    const { pathname } = url;
+
+    if (request.method === "POST" && pathname === "/api/submit") {
+      return handleSubmit(request, env);
+    }
+    if (request.method === "GET" && pathname === "/api/admin/queue") {
+      return handleAdminQueue(request, env);
+    }
+    const reviewMatch = pathname.match(/^\/api\/admin\/review\/([^/]+)$/);
+    if (request.method === "POST" && reviewMatch) {
+      return handleAdminReview(request, env, reviewMatch[1]);
+    }
+
+    return env.ASSETS.fetch(request);
+  },
+};
