@@ -1,0 +1,19 @@
+public/index.html
+  s_96cd0bd017048c::t_3ad0c464e85a55 941-1120
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "b86284f5e23a7c05ba62abc31d9b17c2ecdbd8eb",
+  "prompts": {},
+  "sessions": {
+    "s_96cd0bd017048c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "32b91534-72ef-4e62-b9d0-d326b1a5c276",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Anders Eriksson <36226327+blixten85@users.noreply.github.com>"
+    }
+  }
+}
