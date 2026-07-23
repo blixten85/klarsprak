@@ -1,0 +1,36 @@
+README.md
+  s_96cd0bd017048c::t_b332524b99b18b 22-26,30-64,79-80
+CLAUDE.md
+  s_96cd0bd017048c::t_613882e48f4723 10-17
+src/worker.js
+  s_96cd0bd017048c::t_b74f0c058c8643 1-166
+migrations/0001_create_submissions.sql
+  s_96cd0bd017048c::t_f43d2fd1845154 1-16
+public/index.html
+  s_96cd0bd017048c::t_cd0532ea461502 1020-1092
+  s_96cd0bd017048c::t_5b5e475dd7a473 375-546
+  s_96cd0bd017048c::t_01aae9618930d2 569-570,578-620
+  s_96cd0bd017048c::t_8a3d8ce7fa07a2 621-622
+wrangler.jsonc
+  s_96cd0bd017048c::t_0ab96710418fa5 4,7-8,10-16
+public/admin.html
+  s_96cd0bd017048c::t_b55b9f0fdc1a61 1-411
+bun.lock
+  s_96cd0bd017048c::t_b59d372c44a5ce 1-191
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "6fdc90f8932420903087625392c34282d6711baf",
+  "prompts": {},
+  "sessions": {
+    "s_96cd0bd017048c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "32b91534-72ef-4e62-b9d0-d326b1a5c276",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Anders Eriksson <36226327+blixten85@users.noreply.github.com>"
+    }
+  }
+}
