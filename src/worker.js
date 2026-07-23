@@ -58,6 +58,20 @@ function validateSubmission(body) {
   return null;
 }
 
+const RATE_LIMIT_MAX = 5;
+const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 timme
+
+async function isRateLimited(env, ip) {
+  if (!ip) return false; // kan inte spärra det vi inte kan identifiera
+  const since = new Date(Date.now() - RATE_LIMIT_WINDOW_MS).toISOString();
+  const { results } = await env.DB.prepare(
+    `SELECT COUNT(*) AS n FROM submissions WHERE submitter_ip = ? AND created_at > ?`
+  )
+    .bind(ip, since)
+    .all();
+  return (results[0]?.n ?? 0) >= RATE_LIMIT_MAX;
+}
+
 function checkAdminAuth(request, env) {
   if (!env.ADMIN_TOKEN) return false;
   const auth = request.headers.get("authorization") || "";
@@ -77,12 +91,20 @@ async function handleSubmit(request, env) {
   const error = validateSubmission(body);
   if (error) return badRequest(error);
 
+  const ip = request.headers.get("CF-Connecting-IP");
+  if (await isRateLimited(env, ip)) {
+    return json(
+      { error: "För många förslag från samma adress. Försök igen om en stund." },
+      { status: 429 }
+    );
+  }
+
   const now = new Date().toISOString();
   await env.DB.prepare(
     `INSERT INTO submissions
       (term, foreslagen_juridisk_definition, foreslagen_vardagsbetydelse, foreslagen_exempel,
-       inskickare_namn, inskickare_kommentar, status, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, 'pending', ?)`
+       inskickare_namn, inskickare_kommentar, status, created_at, submitter_ip)
+     VALUES (?, ?, ?, ?, ?, ?, 'pending', ?, ?)`
   )
     .bind(
       body.term.trim(),
@@ -91,7 +113,8 @@ async function handleSubmit(request, env) {
       clean(body.foreslagen_exempel),
       clean(body.inskickare_namn),
       clean(body.inskickare_kommentar),
-      now
+      now,
+      ip || null
     )
     .run();
 

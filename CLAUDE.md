@@ -14,7 +14,9 @@ politiker.denied.se. Live på klarsprak.denied.se.
   assets-bindingen.
 - Worker-namn: `klarsprak`. Config i `wrangler.jsonc` (assets-binding +
   D1-binding `DB` mot databasen `klarsprak-db`).
-- Admin-endpoints skyddas av bearer-token mot secreten `ADMIN_TOKEN`.
+- Admin-endpoints skyddas i två lager: Cloudflare Access (Zero Trust-app
+  "klarsprak admin (UI + API)", e-postpolicy) blockerar vid edgen, och
+  Worker-koden kräver därutöver bearer-token mot secreten `ADMIN_TOKEN`.
 - Deploy sker via `.github/workflows/deploy.yml` vid push till main.
 - Innehållet i ordboken är AI-genererat och opublicerat — inte juridiskt
   sakgranskat. Ändra gärna presentation/kod, men flagga tydligt om
