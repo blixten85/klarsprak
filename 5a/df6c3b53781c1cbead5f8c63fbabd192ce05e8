@@ -1,0 +1,57 @@
+.coderabbit.yaml
+  s_96cd0bd017048c::t_324e574472e456 1-9
+.github/FUNDING.yml
+  s_96cd0bd017048c::t_70e86b455b596b 1-3
+.github/ISSUE_TEMPLATE/bug_report.yml
+  s_96cd0bd017048c::t_29ed10067507d6 1-35
+.github/ISSUE_TEMPLATE/config.yml
+  s_96cd0bd017048c::t_98207a0cb61476 1-2
+.github/ISSUE_TEMPLATE/feature_request.yml
+  s_96cd0bd017048c::t_224974bf57048b 1-24
+.github/pull_request_template.md
+  s_96cd0bd017048c::t_d31fccb497da09 1-10
+.github/workflows/auto-commit.yml
+  s_96cd0bd017048c::t_316f113e335128 1-34
+.github/workflows/auto-label.yml
+  s_96cd0bd017048c::t_ba89f69a423bc0 1-19
+.github/workflows/auto-merge.yml
+  s_96cd0bd017048c::t_899e0930342951 1-130
+.github/workflows/auto-rebase.yml
+  s_96cd0bd017048c::t_1ae7a2ee703e2e 1-55
+.github/workflows/auto-release.yml
+  s_96cd0bd017048c::t_309b1e90d0b111 1-62
+.github/workflows/ci-autofix.yml
+  s_96cd0bd017048c::t_d2d64ac26cf83e 1-32
+.github/workflows/claude-assign-trigger.yml
+  s_96cd0bd017048c::t_f9802686f15d6f 1-48
+.github/workflows/coderabbit-rewake.yml
+  s_96cd0bd017048c::t_eea4ae8170bb20 1-116
+.github/workflows/security-alerts-sync.yml
+  s_96cd0bd017048c::t_d8ec40e61f9c91 1-109
+.gitignore
+  s_96cd0bd017048c::t_c1414781ef88fb 1-3
+LICENSE
+  s_96cd0bd017048c::t_57abe5d6221a68 1-21
+apply-ruleset.sh
+  s_96cd0bd017048c::t_49022c866477b3 1-12
+branch-ruleset-template.json
+  s_96cd0bd017048c::t_bd4e6dbd0365c9 1-48
+public/index.html
+  s_96cd0bd017048c::t_11c7ec6df7c61c 1-803
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "5adf6c3b53781c1cbead5f8c63fbabd192ce05e8",
+  "prompts": {},
+  "sessions": {
+    "s_96cd0bd017048c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "32b91534-72ef-4e62-b9d0-d326b1a5c276",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Anders Eriksson <36226327+blixten85@users.noreply.github.com>"
+    }
+  }
+}
