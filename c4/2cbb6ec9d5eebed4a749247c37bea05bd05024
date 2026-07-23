@@ -1,0 +1,24 @@
+src/worker.js
+  s_96cd0bd017048c::t_bab1df22f271f5 75-81,87
+.github/workflows/deploy.yml
+  s_96cd0bd017048c::t_d6cc721cf01c75 30
+  s_96cd0bd017048c::t_1aa447206f6ea3 32,34
+public/admin.html
+  s_96cd0bd017048c::t_e30f2900b24ea3 317
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "c42cbb6ec9d5eebed4a749247c37bea05bd05024",
+  "prompts": {},
+  "sessions": {
+    "s_96cd0bd017048c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "32b91534-72ef-4e62-b9d0-d326b1a5c276",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "Anders Eriksson <36226327+blixten85@users.noreply.github.com>"
+    }
+  }
+}
