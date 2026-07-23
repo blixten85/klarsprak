@@ -72,12 +72,19 @@ async function isRateLimited(env, ip) {
   return (results[0]?.n ?? 0) >= RATE_LIMIT_MAX;
 }
 
+function timingSafeEqual(a, b) {
+  if (a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
 function checkAdminAuth(request, env) {
   if (!env.ADMIN_TOKEN) return false;
   const auth = request.headers.get("authorization") || "";
   const match = auth.match(/^Bearer\s+(.+)$/i);
   if (!match) return false;
-  return match[1] === env.ADMIN_TOKEN;
+  return timingSafeEqual(match[1], env.ADMIN_TOKEN);
 }
 
 async function handleSubmit(request, env) {
