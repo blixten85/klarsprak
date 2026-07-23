@@ -47,6 +47,18 @@ En människa (kontoägaren) granskar kön på `/admin.html`:
 - `POST /api/admin/review/:id` med body `{"action": "approve"|"reject",
   "note"?: string}` uppdaterar status.
 
+### Skydd i två lager
+
+`/admin`, `/admin/*` och `/api/admin/*` skyddas av **Cloudflare Access**
+(Zero Trust-app "klarsprak admin (UI + API)", policy: e-postinloggning för
+kontoägaren) — obehöriga blockeras redan vid Cloudflare-edgen, innan
+requesten når workern. Detta är samma mönster som politiker-webapp använder
+för sitt `/admin`.
+
+Utöver Access behåller Worker-koden sin egen `ADMIN_TOKEN`-kontroll som
+andra skyddslager (defense in depth) — även om Access någon gång
+misskonfigureras krävs fortfarande token för att nå API:erna.
+
 Admin-endpoints skyddas av en bearer-token-check mot secreten `ADMIN_TOKEN`:
 
 ```sh
