@@ -61,15 +61,22 @@ function validateSubmission(body) {
 const RATE_LIMIT_MAX = 5;
 const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 timme
 
-async function isRateLimited(env, ip) {
-  if (!ip) return false; // kan inte spärra det vi inte kan identifiera
+// Atomisk insert som bara skriver om IP:n ligger under gränsen inom fönstret.
+// Count + insert i ett enda statement stänger TOCTOU-glappet vid samtidiga
+// förfrågningar från samma adress. Returnerar antalet skrivna rader (0 = spärrad).
+async function insertIfUnderRateLimit(env, values, ip) {
   const since = new Date(Date.now() - RATE_LIMIT_WINDOW_MS).toISOString();
-  const { results } = await env.DB.prepare(
-    `SELECT COUNT(*) AS n FROM submissions WHERE submitter_ip = ? AND created_at > ?`
+  const result = await env.DB.prepare(
+    `INSERT INTO submissions
+      (term, foreslagen_juridisk_definition, foreslagen_vardagsbetydelse, foreslagen_exempel,
+       inskickare_namn, inskickare_kommentar, status, created_at, submitter_ip)
+     SELECT ?, ?, ?, ?, ?, ?, 'pending', ?, ?
+     WHERE ? IS NULL
+        OR (SELECT COUNT(*) FROM submissions WHERE submitter_ip = ? AND created_at > ?) < ?`
   )
-    .bind(ip, since)
-    .all();
-  return (results[0]?.n ?? 0) >= RATE_LIMIT_MAX;
+    .bind(...values, ip, ip, since, RATE_LIMIT_MAX)
+    .run();
+  return result.meta.changes;
 }
 
 function checkAdminAuth(request, env) {
@@ -92,21 +99,10 @@ async function handleSubmit(request, env) {
   if (error) return badRequest(error);
 
   const ip = request.headers.get("CF-Connecting-IP");
-  if (await isRateLimited(env, ip)) {
-    return json(
-      { error: "För många förslag från samma adress. Försök igen om en stund." },
-      { status: 429 }
-    );
-  }
-
   const now = new Date().toISOString();
-  await env.DB.prepare(
-    `INSERT INTO submissions
-      (term, foreslagen_juridisk_definition, foreslagen_vardagsbetydelse, foreslagen_exempel,
-       inskickare_namn, inskickare_kommentar, status, created_at, submitter_ip)
-     VALUES (?, ?, ?, ?, ?, ?, 'pending', ?, ?)`
-  )
-    .bind(
+  const changes = await insertIfUnderRateLimit(
+    env,
+    [
       body.term.trim(),
       clean(body.foreslagen_juridisk_definition),
       clean(body.foreslagen_vardagsbetydelse),
@@ -114,9 +110,17 @@ async function handleSubmit(request, env) {
       clean(body.inskickare_namn),
       clean(body.inskickare_kommentar),
       now,
-      ip || null
-    )
-    .run();
+      ip || null,
+    ],
+    ip || null
+  );
+
+  if (!changes) {
+    return json(
+      { error: "För många förslag från samma adress. Försök igen om en stund." },
+      { status: 429 }
+    );
+  }
 
   return json({ ok: true, message: "Tack, ditt förslag granskas innan det publiceras." }, { status: 201 });
 }
